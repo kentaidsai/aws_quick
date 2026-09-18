@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Module 0 · 課程介紹</title><style>
+  :root{--navy:#1b2838;--navy2:#243447;--ink:#0f1722;--orange:#ff9900;--orange-d:#e17b00;
+    --teal:#1aa9a3;--teal-d:#128b86;--paper:#f6f8fb;--card:#fff;--line:#e4e9f0;--muted:#5f6b7a;--good:#1f9d61;
+    --sh:0 2px 10px rgba(20,30,45,.06),0 10px 30px rgba(20,30,45,.05);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#2c4a63 100%);
+    color:#fff;border-radius:22px;padding:34px 38px;position:relative;overflow:hidden;box-shadow:var(--sh)}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;
+    background:radial-gradient(circle,rgba(255,153,0,.28),transparent 68%)}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--orange);
+    background:rgba(255,153,0,.12);border:1px solid rgba(255,153,0,.35);padding:5px 12px;border-radius:999px}
+  h1{font-size:32px;font-weight:800;margin:14px 0 6px;letter-spacing:-.5px}
+  .hero .sub{font-size:15px;color:#c7d3e0;max-width:780px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    border-radius:10px;padding:8px 14px;font-size:13px;color:#e7eef6}
+  .chip b{color:#fff}
+  .obj{margin-top:14px;font-size:13px;color:#aeb9c7}.obj b{color:#ffcf8a;font-weight:700}
+  .section-h{display:flex;align-items:center;gap:12px;margin:36px 4px 16px}
+  .section-h .n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:var(--navy);color:#fff;font-weight:800;font-size:15px;flex:0 0 auto}
+  .section-h h2{font-size:20px;font-weight:800;letter-spacing:-.2px}
+  .section-h .en{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.05em}
+  .dims{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+  .dim{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 15px 14px;
+    box-shadow:var(--sh);border-top:3px solid var(--c)}
+  .dim .top{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .dim .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;
+    background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c);font-size:16px}
+  .dim .no{font-size:11px;font-weight:800;color:var(--c);letter-spacing:.05em}
+  .dim h3{font-size:14.5px;font-weight:800;line-height:1.3}
+  .dim .en{font-size:11px;color:var(--muted);font-weight:600}
+  .dim p{font-size:12.2px;color:#48586a;margin-top:6px}
+  .dim .eg{font-size:11.4px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
+  .dim .eg b{color:#3a4756}
+  .kc{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:var(--sh)}
+  .qcard .qn{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--orange-d);text-transform:uppercase}
+  .qcard .q{font-size:13.5px;font-weight:700;margin:6px 0 10px;color:#22303f}
+  .ans{display:flex;gap:9px;align-items:flex-start;background:#edf9f1;border:1px solid #bfe6cf;border-radius:10px;padding:10px 12px}
+  .ans .ck{color:#fff;background:var(--good);width:20px;height:20px;border-radius:50%;
+    display:grid;place-items:center;font-size:12px;flex:0 0 auto;margin-top:1px}
+  .ans p{font-size:12.4px;color:#1d5138}.ans p b{color:#12492e}
+  .takeaway{margin-top:32px;background:linear-gradient(120deg,#fff7ea,#fdeede);
+    border:1px solid #f4d9a8;border-radius:16px;padding:20px 24px;display:flex;gap:15px;align-items:flex-start}
+  .takeaway .star{font-size:26px;line-height:1}
+  .takeaway h3{font-size:15px;font-weight:800;color:var(--orange-d);margin-bottom:4px}
+  .takeaway p{font-size:13.5px;color:#5a4a2e}
+  footer{margin-top:30px;text-align:center;font-size:11.5px;color:var(--muted)}
+  @media(max-width:920px){.dims{grid-template-columns:repeat(2,1fr)}.kc{grid-template-columns:1fr}h1{font-size:25px}}
+  @media(max-width:540px){.dims{grid-template-columns:1fr}}
+  @media print{body{background:#fff}.wrap{max-width:100%}.hero,.dim,.qcard{box-shadow:none}}
+</style></head><body><div class="wrap"><header class="hero"><span class="kicker">◆ Module 0 · Amazon Quick for AI-Powered Productivity and Business Intelligence</span><h1>課程介紹</h1><div class="sub">課程開場——學習目標、議程與教室 logistics。</div><div class="obj"><b>學習目標：</b> 課程學習目標 · 議程總覽 · 上課環境與 Lab 準備</div><div class="hero-meta"><span class="chip">📑 共 <b>14</b> 張投影片</span><span class="chip">🎯 <b>5</b> 項課程目標</span></div></header><div class="section-h"><div class="n">1</div><div><h2>重點概念</h2><div class="en">Key Concepts · 目標 → 議程 → 教室規則 → Lab 註冊</div></div></div><div class="dims"><div class="dim" style="--c:#e0568a"><div class="top"><div class="ic">🎯</div><div><div class="no">01</div></div></div><h3>課程目標</h3><div class="en">Course Objectives</div><p>完課後能導覽 Amazon Quick、用 Quick Sight 建立儀表板、管理 Spaces、建立客製 Chat Agents/Flows,並用 Research Agent 執行有來源驗證的研究。</p></div><div class="dim" style="--c:#d64545"><div class="top"><div class="ic">🗺️</div><div><div class="no">02</div></div></div><h3>課程議程</h3><div class="en">Course Agenda</div><p>M1~M4 四個模組搭配 3 個實作 Lab,循序建立完整的 Amazon Quick 操作能力。</p></div><div class="dim" style="--c:#3b7dd8"><div class="top"><div class="ic">📋</div><div><div class="no">03</div></div></div><h3>教室 Logistics</h3><div class="en">Course Logistics</div><p>休息、午餐、安全規範、手機使用,以及虛擬教室的語音/聊天/舉手功能說明。</p></div><div class="dim" style="--c:#1aa9a3"><div class="top"><div class="ic">🙋</div><div><div class="no">04</div></div></div><h3>自我介紹</h3><div class="en">Introductions</div><p>分享職務、學習目標,以及 ML 與 AWS 的經驗值(1~5 分),幫助講師掌握班級輪廓。</p></div><div class="dim" style="--c:#7c6ce0"><div class="top"><div class="ic">💬</div><div><div class="no">05</div></div></div><h3>課堂參與</h3><div class="en">Engagement</div><p>討論、活動、Lab 與示範是內化知識的主要管道,鼓勵主動提問與參與。</p></div><div class="dim" style="--c:#128b86"><div class="top"><div class="ic">🔑</div><div><div class="no">06</div></div></div><h3>Lab 環境註冊</h3><div class="en">Lab Registration</div><p>透過歡迎信中的專屬連結註冊 AWS Builder Labs,取得 Student Guide、Lab Guide 與實作環境存取權。</p><div class="eg"><b>eVantage Bookshelf (VitalSource)</b></div></div></div><div class="takeaway"><div class="star">⭐</div><div><h3>一句話總結</h3><p>先弄清楚議程與 Lab 註冊流程,才能把心力留給後面四個模組的實作。</p></div></div><footer>Module 0: Course Introduction · Amazon Quick for AI-Powered Productivity and Business Intelligence</footer></div></body></html>

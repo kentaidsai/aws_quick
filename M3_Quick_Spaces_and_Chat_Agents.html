@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Module 3 · Quick Spaces 與 Chat Agents</title><style>
+  :root{--navy:#1b2838;--navy2:#243447;--ink:#0f1722;--orange:#ff9900;--orange-d:#e17b00;
+    --teal:#1aa9a3;--teal-d:#128b86;--paper:#f6f8fb;--card:#fff;--line:#e4e9f0;--muted:#5f6b7a;--good:#1f9d61;
+    --sh:0 2px 10px rgba(20,30,45,.06),0 10px 30px rgba(20,30,45,.05);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#2c4a63 100%);
+    color:#fff;border-radius:22px;padding:34px 38px;position:relative;overflow:hidden;box-shadow:var(--sh)}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;
+    background:radial-gradient(circle,rgba(255,153,0,.28),transparent 68%)}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--orange);
+    background:rgba(255,153,0,.12);border:1px solid rgba(255,153,0,.35);padding:5px 12px;border-radius:999px}
+  h1{font-size:32px;font-weight:800;margin:14px 0 6px;letter-spacing:-.5px}
+  .hero .sub{font-size:15px;color:#c7d3e0;max-width:780px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    border-radius:10px;padding:8px 14px;font-size:13px;color:#e7eef6}
+  .chip b{color:#fff}
+  .obj{margin-top:14px;font-size:13px;color:#aeb9c7}.obj b{color:#ffcf8a;font-weight:700}
+  .section-h{display:flex;align-items:center;gap:12px;margin:36px 4px 16px}
+  .section-h .n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:var(--navy);color:#fff;font-weight:800;font-size:15px;flex:0 0 auto}
+  .section-h h2{font-size:20px;font-weight:800;letter-spacing:-.2px}
+  .section-h .en{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.05em}
+  .dims{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+  .dim{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 15px 14px;
+    box-shadow:var(--sh);border-top:3px solid var(--c)}
+  .dim .top{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .dim .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;
+    background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c);font-size:16px}
+  .dim .no{font-size:11px;font-weight:800;color:var(--c);letter-spacing:.05em}
+  .dim h3{font-size:14.5px;font-weight:800;line-height:1.3}
+  .dim .en{font-size:11px;color:var(--muted);font-weight:600}
+  .dim p{font-size:12.2px;color:#48586a;margin-top:6px}
+  .dim .eg{font-size:11.4px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
+  .dim .eg b{color:#3a4756}
+  .kc{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:var(--sh)}
+  .qcard .qn{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--orange-d);text-transform:uppercase}
+  .qcard .q{font-size:13.5px;font-weight:700;margin:6px 0 10px;color:#22303f}
+  .ans{display:flex;gap:9px;align-items:flex-start;background:#edf9f1;border:1px solid #bfe6cf;border-radius:10px;padding:10px 12px}
+  .ans .ck{color:#fff;background:var(--good);width:20px;height:20px;border-radius:50%;
+    display:grid;place-items:center;font-size:12px;flex:0 0 auto;margin-top:1px}
+  .ans p{font-size:12.4px;color:#1d5138}.ans p b{color:#12492e}
+  .takeaway{margin-top:32px;background:linear-gradient(120deg,#fff7ea,#fdeede);
+    border:1px solid #f4d9a8;border-radius:16px;padding:20px 24px;display:flex;gap:15px;align-items:flex-start}
+  .takeaway .star{font-size:26px;line-height:1}
+  .takeaway h3{font-size:15px;font-weight:800;color:var(--orange-d);margin-bottom:4px}
+  .takeaway p{font-size:13.5px;color:#5a4a2e}
+  footer{margin-top:30px;text-align:center;font-size:11.5px;color:var(--muted)}
+  @media(max-width:920px){.dims{grid-template-columns:repeat(2,1fr)}.kc{grid-template-columns:1fr}h1{font-size:25px}}
+  @media(max-width:540px){.dims{grid-template-columns:1fr}}
+  @media print{body{background:#fff}.wrap{max-width:100%}.hero,.dim,.qcard{box-shadow:none}}
+</style></head><body><div class="wrap"><header class="hero"><span class="kicker">◆ Module 3 · Amazon Quick for AI-Powered Productivity and Business Intelligence</span><h1>Quick Spaces 與 Chat Agents</h1><div class="sub">用 Spaces 彙整知識、打造客製 Chat Agent,並寫出有效的 BI 提示詞。</div><div class="obj"><b>學習目標：</b> 說明 knowledge bases/connectors 如何擴充代理能力 · 建立 Space 並加入知識資源 · 設定客製 chat agent · 撰寫有效 BI 提示詞</div><div class="hero-meta"><span class="chip">📑 共 <b>31</b> 張投影片</span><span class="chip">🧪 含 <b>Lab 2</b></span><span class="chip">🎯 <b>4</b> 項學習目標</span></div></header><div class="section-h"><div class="n">1</div><div><h2>重點概念</h2><div class="en">Key Concepts · 知識庫/連接器 → Spaces → Chat Agents → 提示工程</div></div></div><div class="dims"><div class="dim" style="--c:#e0568a"><div class="top"><div class="ic">🗂️</div><div><div class="no">01</div></div></div><h3>Knowledge Bases vs Connectors</h3><div class="en">Knowledge Bases vs Connectors</div><p>Knowledge bases 索引內容供代理檢索(唯讀);Connectors 讓代理在外部系統執行動作(讀寫)。</p></div><div class="dim" style="--c:#d64545"><div class="top"><div class="ic">🔗</div><div><div class="no">02</div></div></div><h3>六種資料存取整合</h3><div class="en">Data Access Integrations</div><p>Amazon S3、Web Crawler,以及 OneDrive、SharePoint、Google Drive、Confluence 四種第三方工具。</p></div><div class="dim" style="--c:#3b7dd8"><div class="top"><div class="ic">🧰</div><div><div class="no">03</div></div></div><h3>六大類 Connector</h3><div class="en">Connector Categories</div><p>AWS 服務、專案管理(Asana/Jira)、CRM/客服(Salesforce/Zendesk)、生產力(Slack/Teams)、開發工具、IT/維運;亦支援自訂 REST API 與 MCP server。</p></div><div class="dim" style="--c:#1aa9a3"><div class="top"><div class="ic">📦</div><div><div class="no">04</div></div></div><h3>Quick Spaces 三種型態</h3><div class="en">Three Space Types</div><p>Personal(個人)、Team(部門共用)、Cross-functional(跨部門協作),差異只在內容範圍與分享對象。</p></div><div class="dim" style="--c:#7c6ce0"><div class="top"><div class="ic">📥</div><div><div class="no">05</div></div></div><h3>加入 Space 的五種知識</h3><div class="en">Adding Knowledge</div><p>檔案上傳、Knowledge bases、Actions、Dashboards、Datasets,皆遵循原始存取權限(上傳檔案除外,對空間成員全開放)。</p></div><div class="dim" style="--c:#128b86"><div class="top"><div class="ic">✅</div><div><div class="no">06</div></div></div><h3>管理 Space 最佳實務</h3><div class="en">Space Best Practices</div><p>用領域/專案命名、寫清楚用途說明、定期清除過時內容、留意連結資源(儀表板刪除後空間內會靜默失效)。</p></div><div class="dim" style="--c:#e17b00"><div class="top"><div class="ic">🤖</div><div><div class="no">07</div></div></div><h3>系統代理 vs 客製代理</h3><div class="en">System vs Custom Agent</div><p>系統聊天代理預設可用、依使用者權限動態存取資源;客製代理可指定 persona、知識來源與 connector,分享後才對他人可見。</p></div><div class="dim" style="--c:#1b2838"><div class="top"><div class="ic">🏗️</div><div><div class="no">08</div></div></div><h3>建立客製代理的三種方式</h3><div class="en">Three Ways to Build</div><p>從範本開始、用自然語言描述(格式:做什麼/給誰/主題/能力/語氣)、或在 Builder view 手動設定 persona、參考文件與資源。</p></div><div class="dim" style="--c:#2e8b57"><div class="top"><div class="ic">✍️</div><div><div class="no">09</div></div></div><h3>提示詞六大元件</h3><div class="en">Prompt Components</div><p>Task、Instruction、Input、Output、Tone and style、Constraints,組合起來能大幅提升 BI 回答的相關性與可用性。</p></div><div class="dim" style="--c:#b0518f"><div class="top"><div class="ic">🧪</div><div><div class="no">10</div></div></div><h3>Lab 2</h3><div class="en">Lab 2</div><p>用 Quick Spaces 建立知識庫,再設定一個能依此空間內容回答問題的客製 HR chat agent。</p></div></div><div class="takeaway"><div class="star">⭐</div><div><h3>一句話總結</h3><p>提示詞公式:<b>Input(去哪找)+ Task(做什麼)+ Output(什麼格式)</b>,是每次問 BI 問題最少要給的三件事。</p></div></div><footer>Module 3: Amazon Quick Spaces and Chat Agents · Amazon Quick for AI-Powered Productivity and Business Intelligence</footer></div></body></html>

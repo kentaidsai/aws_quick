@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Module 4 · Quick Flows 與 Quick Research</title><style>
+  :root{--navy:#1b2838;--navy2:#243447;--ink:#0f1722;--orange:#ff9900;--orange-d:#e17b00;
+    --teal:#1aa9a3;--teal-d:#128b86;--paper:#f6f8fb;--card:#fff;--line:#e4e9f0;--muted:#5f6b7a;--good:#1f9d61;
+    --sh:0 2px 10px rgba(20,30,45,.06),0 10px 30px rgba(20,30,45,.05);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#2c4a63 100%);
+    color:#fff;border-radius:22px;padding:34px 38px;position:relative;overflow:hidden;box-shadow:var(--sh)}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;
+    background:radial-gradient(circle,rgba(255,153,0,.28),transparent 68%)}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--orange);
+    background:rgba(255,153,0,.12);border:1px solid rgba(255,153,0,.35);padding:5px 12px;border-radius:999px}
+  h1{font-size:32px;font-weight:800;margin:14px 0 6px;letter-spacing:-.5px}
+  .hero .sub{font-size:15px;color:#c7d3e0;max-width:780px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    border-radius:10px;padding:8px 14px;font-size:13px;color:#e7eef6}
+  .chip b{color:#fff}
+  .obj{margin-top:14px;font-size:13px;color:#aeb9c7}.obj b{color:#ffcf8a;font-weight:700}
+  .section-h{display:flex;align-items:center;gap:12px;margin:36px 4px 16px}
+  .section-h .n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:var(--navy);color:#fff;font-weight:800;font-size:15px;flex:0 0 auto}
+  .section-h h2{font-size:20px;font-weight:800;letter-spacing:-.2px}
+  .section-h .en{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.05em}
+  .dims{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+  .dim{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 15px 14px;
+    box-shadow:var(--sh);border-top:3px solid var(--c)}
+  .dim .top{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .dim .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;
+    background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c);font-size:16px}
+  .dim .no{font-size:11px;font-weight:800;color:var(--c);letter-spacing:.05em}
+  .dim h3{font-size:14.5px;font-weight:800;line-height:1.3}
+  .dim .en{font-size:11px;color:var(--muted);font-weight:600}
+  .dim p{font-size:12.2px;color:#48586a;margin-top:6px}
+  .dim .eg{font-size:11.4px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
+  .dim .eg b{color:#3a4756}
+  .kc{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:var(--sh)}
+  .qcard .qn{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--orange-d);text-transform:uppercase}
+  .qcard .q{font-size:13.5px;font-weight:700;margin:6px 0 10px;color:#22303f}
+  .ans{display:flex;gap:9px;align-items:flex-start;background:#edf9f1;border:1px solid #bfe6cf;border-radius:10px;padding:10px 12px}
+  .ans .ck{color:#fff;background:var(--good);width:20px;height:20px;border-radius:50%;
+    display:grid;place-items:center;font-size:12px;flex:0 0 auto;margin-top:1px}
+  .ans p{font-size:12.4px;color:#1d5138}.ans p b{color:#12492e}
+  .takeaway{margin-top:32px;background:linear-gradient(120deg,#fff7ea,#fdeede);
+    border:1px solid #f4d9a8;border-radius:16px;padding:20px 24px;display:flex;gap:15px;align-items:flex-start}
+  .takeaway .star{font-size:26px;line-height:1}
+  .takeaway h3{font-size:15px;font-weight:800;color:var(--orange-d);margin-bottom:4px}
+  .takeaway p{font-size:13.5px;color:#5a4a2e}
+  footer{margin-top:30px;text-align:center;font-size:11.5px;color:var(--muted)}
+  @media(max-width:920px){.dims{grid-template-columns:repeat(2,1fr)}.kc{grid-template-columns:1fr}h1{font-size:25px}}
+  @media(max-width:540px){.dims{grid-template-columns:1fr}}
+  @media print{body{background:#fff}.wrap{max-width:100%}.hero,.dim,.qcard{box-shadow:none}}
+</style></head><body><div class="wrap"><header class="hero"><span class="kicker">◆ Module 4 · Amazon Quick for AI-Powered Productivity and Business Intelligence</span><h1>Quick Flows 與 Quick Research</h1><div class="sub">用 Quick Flows 組裝自動化步驟,並用 Quick Research 執行有引用來源的深度研究。</div><div class="obj"><b>學習目標：</b> 解釋 Flows 如何自動化例行工作 · 選用五種步驟類型組裝流程 · 排程與分享 Flow · 用 Quick Research 執行完整研究專案</div><div class="hero-meta"><span class="chip">📑 共 <b>39</b> 張投影片(全課程最長)</span><span class="chip">🧪 含 <b>Lab 3</b></span><span class="chip">🎯 <b>2</b> 個工具</span></div></header><div class="section-h"><div class="n">1</div><div><h2>重點概念</h2><div class="en">Key Concepts · Flows 五種 Step → 排程分享 → Quick Research 四階段</div></div></div><div class="dims"><div class="dim" style="--c:#e0568a"><div class="top"><div class="ic">⚖️</div><div><div class="no">01</div></div></div><h3>Flows vs Automate</h3><div class="en">Choosing the Right Tool</div><p>Flows 面向個人/團隊的短流程、無 code;Automate 面向企業級、長時間、高交易量的流程,支援控制流程與自訂程式碼。</p></div><div class="dim" style="--c:#d64545"><div class="top"><div class="ic">🧵</div><div><div class="no">02</div></div></div><h3>五種 Step 類型</h3><div class="en">Five Step Types</div><p>User input、AI responses(最大類別)、Data insights、Flow logic(Reasoning group)、Action,一個流程不必用到全部五種。</p></div><div class="dim" style="--c:#3b7dd8"><div class="top"><div class="ic">⌨️</div><div><div class="no">03</div></div></div><h3>User Input Steps</h3><div class="en">User Input Steps</div><p>文字輸入(可設 placeholder/預設值)與檔案上傳(文件/圖片/影片),通常放在流程最前面提供後續步驟引用的資料。</p></div><div class="dim" style="--c:#1aa9a3"><div class="top"><div class="ic">📊</div><div><div class="no">04</div></div></div><h3>Data Insight Steps</h3><div class="en">Data Insight Steps</div><p>Quick data 步驟查詢 Spaces/知識庫;Dashboards and topics 步驟則從 Quick Sight 產生含圖表的洞察。</p></div><div class="dim" style="--c:#7c6ce0"><div class="top"><div class="ic">🧠</div><div><div class="no">05</div></div></div><h3>AI Response Steps</h3><div class="en">AI Response Steps</div><p>涵蓋 Chat agent(單輪回應)、Research(啟動研究工作)、General knowledge(直接呼叫 Bedrock 模型)、Create image、Web search、UI Agent(預覽功能,可操作公開網站)。</p></div><div class="dim" style="--c:#128b86"><div class="top"><div class="ic">🔀</div><div><div class="no">06</div></div></div><h3>Reasoning Group</h3><div class="en">Flow Logic</div><p>用自然語言定義 Loop(對清單逐一處理)、Condition(條件成立才執行)、Validation(執行前驗證)三種控制模式。</p></div><div class="dim" style="--c:#e17b00"><div class="top"><div class="ic">⚙️</div><div><div class="no">07</div></div></div><h3>Action Steps</h3><div class="en">Action Steps</div><p>選定 connector(如 Slack)→ 選動作類型 → 寫提示詞 → 用 @ 參照前面步驟輸出作為參數,讓流程在外部系統中真正「動手做」。</p></div><div class="dim" style="--c:#1b2838"><div class="top"><div class="ic">🔖</div><div><div class="no">08</div></div></div><h3>@ 參照與步驟命名</h3><div class="en">Referencing Steps</div><p>每個步驟輸出都能被後面步驟用 @步驟名稱 引用,取清楚的步驟標題能大幅提升流程可維護性。</p><div class="eg"><b>「Search HR documentation」優於「Step 2」</b></div></div><div class="dim" style="--c:#2e8b57"><div class="top"><div class="ic">⏰</div><div><div class="no">09</div></div></div><h3>排程與分享 Flow</h3><div class="en">Scheduling &amp; Sharing</div><p>可依日/週/月排程自動執行、追蹤 30 天內執行紀錄;分享前需先發布(視組織是否啟用審核流程,決定直接發布或送審)。</p></div><div class="dim" style="--c:#b0518f"><div class="top"><div class="ic">🔍</div><div><div class="no">10</div></div></div><h3>Quick Research 是什麼</h3><div class="en">What Is Quick Research</div><p>針對研究目標,綜合網路搜尋、上傳檔案、Quick 資源與第三方資料,產出附引用來源與可追溯依據的結構化研究報告。</p></div><div class="dim" style="--c:#c0873b"><div class="top"><div class="ic">🧭</div><div><div class="no">11</div></div></div><h3>研究專案四階段</h3><div class="en">Four-Phase Lifecycle</div><p>定義目標與選材料 → 檢視並修改研究計畫 → 執行(Fast 4-7 分鐘 / Deep 20-40 分鐘)並檢視報告 → 精修與分享(Executive/Amazon-style/Custom 三種摘要)。</p></div><div class="dim" style="--c:#3aa0a8"><div class="top"><div class="ic">🧪</div><div><div class="no">12</div></div></div><h3>Lab 3</h3><div class="en">Lab 3</div><p>用 Quick Research 產出研究報告,並從一段 chat 對話直接生成 Flow,整合外部系統與網路搜尋。</p></div></div><div class="takeaway"><div class="star">⭐</div><div><h3>一句話總結</h3><p>先想清楚要用 <b>Flows(個人/團隊、短流程)</b>還是 <b>Automate(企業級、長流程)</b>,再決定要組裝哪五種 Step。</p></div></div><footer>Module 4: Amazon Quick Flows and Quick Research · Amazon Quick for AI-Powered Productivity and Business Intelligence</footer></div></body></html>

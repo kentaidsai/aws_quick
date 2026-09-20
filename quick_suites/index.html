@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AWS Quick 服務總覽與自動化工具比較</title>
+<style>
+  :root {
+    --bg: #0B1F3A; --panel: #132A4C; --accent: #FF9900; --text: #F5F7FA;
+    --muted: #A9B8CE; --row-alt: #0F2442; --header-row: #1B3A63;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background: #05101f; color: var(--text);
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
+    overflow: hidden;
+  }
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #05101f;
+  }
+  #canvas {
+    position: relative;
+    width: 1920px; height: 1080px;
+    transform-origin: center center;
+    flex-shrink: 0;
+  }
+  .slide {
+    position: absolute; inset: 0;
+    width: 1920px; height: 1080px;
+    background: var(--bg);
+    display: none;
+    padding: 0;
+    overflow: hidden;
+  }
+  .slide.active { display: block; }
+
+  .kicker {
+    position: absolute; left: 96px; top: 56px;
+    font-size: 22px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase;
+  }
+  .bar {
+    position: absolute; left: 96px; top: 108px;
+    width: 88px; height: 6px; background: var(--accent);
+  }
+  .title {
+    position: absolute; left: 96px; top: 128px; right: 96px;
+    font-size: 52px; font-weight: 700; margin: 0; line-height: 1.25;
+  }
+  .content {
+    position: absolute; left: 112px; top: 300px; right: 112px; bottom: 140px;
+  }
+  .bullets { list-style: none; margin: 0; padding: 0; }
+  .bullets li {
+    font-size: 32px; line-height: 1.5; margin-bottom: 30px; padding-left: 44px;
+    position: relative; color: var(--text);
+  }
+  .bullets li::before {
+    content: "●"; color: var(--accent); position: absolute; left: 0; font-size: 22px; top: 6px;
+  }
+  .bullets li .lead { color: var(--accent); font-weight: 700; }
+
+  .table-wrap { top: 280px; }
+  table.deck-table {
+    width: 100%; border-collapse: collapse; table-layout: fixed;
+  }
+  table.deck-table th, table.deck-table td {
+    text-align: left; padding: 22px 20px; font-size: 22px; line-height: 1.45;
+    border-bottom: 1px solid rgba(255,255,255,0.08); vertical-align: middle;
+  }
+  table.deck-table th {
+    background: var(--header-row); font-size: 24px; font-weight: 700;
+    border-bottom: 2px solid rgba(255,255,255,0.15);
+  }
+  table.deck-table td.lead-cell { color: var(--accent); font-weight: 700; }
+  table.deck-table tbody tr.alt { background: var(--row-alt); }
+  table.deck-table.compare th:first-child,
+  table.deck-table.compare td:first-child { background: var(--header-row); font-weight: 700; color: var(--accent); }
+  table.deck-table.compare td { font-size: 21px; }
+
+  .footer-line {
+    position: absolute; left: 96px; right: 96px; bottom: 96px;
+    height: 2px; background: var(--panel);
+  }
+  .footer-left {
+    position: absolute; left: 96px; bottom: 56px; font-size: 18px; color: var(--muted);
+  }
+  .footer-right {
+    position: absolute; right: 96px; bottom: 56px; font-size: 18px; color: var(--muted);
+  }
+
+  /* title slide */
+  .title-slide .title-panel {
+    position: absolute; right: 0; top: 0; bottom: 0; width: 560px; background: var(--panel);
+  }
+  .title-slide .title-bar {
+    position: absolute; right: 560px; top: 0; bottom: 0; width: 6px; background: var(--accent);
+  }
+  .title-slide .title-content { position: absolute; left: 130px; top: 300px; width: 1260px; }
+  .title-slide .hero-title {
+    font-size: 76px; font-weight: 700; line-height: 1.15; margin: 30px 0 40px;
+  }
+  .title-slide .hero-sub { font-size: 30px; color: var(--muted); margin: 0 0 20px; }
+  .title-slide .hero-note { font-size: 22px; color: var(--muted); margin-top: 220px; }
+
+  .closing-note {
+    position: absolute; left: 112px; bottom: 170px; font-size: 22px; font-weight: 700; color: var(--accent);
+  }
+
+  /* chrome: controls */
+  .ui { position: fixed; inset: 0; pointer-events: none; z-index: 20; }
+  .clickzone { position: absolute; top: 0; bottom: 0; width: 20%; pointer-events: auto; cursor: pointer; }
+  .clickzone.left { left: 0; }
+  .clickzone.right { right: 0; }
+
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; pointer-events: auto; z-index: 30;
+    background: linear-gradient(to bottom, rgba(5,16,31,0.85), transparent);
+  }
+  .topbar .brand { font-size: 14px; color: var(--muted); letter-spacing: 1px; }
+  .topbar select {
+    background: #0F2442; color: var(--text); border: 1px solid #234066;
+    border-radius: 6px; padding: 6px 10px; font-size: 13px; max-width: 42vw;
+  }
+  .topbar .right-controls { display: flex; gap: 8px; align-items: center; }
+  .iconbtn {
+    pointer-events: auto; background: #0F2442; border: 1px solid #234066; color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .iconbtn:hover { background: #1B3A63; }
+
+  .bottombar {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 64px; z-index: 30;
+    display: flex; align-items: center; justify-content: center; gap: 24px;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(5,16,31,0.85), transparent);
+  }
+  .navbtn {
+    pointer-events: auto; background: rgba(255,153,0,0.12); border: 1px solid var(--accent);
+    color: var(--accent); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 14px;
+    font-weight: 700;
+  }
+  .navbtn:hover { background: rgba(255,153,0,0.25); }
+  .navbtn:disabled { opacity: 0.35; cursor: default; }
+  .pageindicator { pointer-events: auto; font-size: 13px; color: var(--muted); min-width: 60px; text-align: center; }
+
+  .progress {
+    position: fixed; left: 0; top: 0; height: 3px; background: var(--accent); z-index: 31;
+    transition: width .25s ease;
+  }
+
+  @media (hover: none) {
+    .topbar select { max-width: 55vw; }
+  }
+</style>
+</head>
+<body>
+  <div class="progress" id="progress" style="width:0%"></div>
+  <div class="stage" id="stage">
+    <div id="canvas">
+      <section class="slide title-slide" data-index="0">
+        <div class="title-panel"></div>
+        <div class="title-bar"></div>
+        <div class="title-content">
+          <div class="kicker">SESSION SUMMARY</div>
+          <h1 class="hero-title">AWS Quick 服務總覽與<br>自動化工具比較</h1>
+          <p class="hero-sub">Amazon Quick Suite 服務地圖・自動化工具比較</p>
+          <p class="hero-note">Ken ・ 2026/09/20</p>
+        </div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">1/14</div></section>
+<section class="slide" data-index="1"><div class="kicker">AGENDA</div><div class="bar"></div><h1 class="title">本次簡報議程</h1><div class="content"><ul class="bullets"><li><span class="lead">Amazon Quick Suite 服務總覽：</span>2026 品牌重整背景與六大服務</li><li><span class="lead">服務深探：</span>各服務的適用情境、成功案例與使用限制</li><li><span class="lead">深度比較：</span>Quick Automate vs. Quick Flows vs. AWS Step Functions</li></ul></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">2/14</div></section>
+<section class="slide" data-index="2"><div class="kicker">PART 1・背景</div><div class="bar"></div><h1 class="title">Amazon Quick Suite 是什麼？</h1><div class="content"><ul class="bullets"><li><span class="lead">2026 年品牌重整：</span>AWS 把原本分散的 AI／分析產品整合成新品牌傘 Amazon Quick Suite（由 Amazon Q 重新命名整合而來）</li><li><span class="lead">QuickSight 平順演進：</span>QuickSight 成為 Amazon Quick Sight，既有 API／SDK／整合方式維持不變</li><li><span class="lead">整合目標：</span>把 AI agent、研究、自動化、分析、應用程式建置整合成單一平台，取代過去分散多產品的作法</li><li><span class="lead">容易混淆提醒：</span>與舊有「AWS Quick Start」（CloudFormation 部署範本）、Systems Manager「Quick Setup」是完全不同的東西</li></ul></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">3/14</div></section>
+<section class="slide" data-index="3"><div class="kicker">PART 1・全貌</div><div class="bar"></div><h1 class="title">六大服務一覽</h1><div class="content table-wrap"><table class="deck-table "><colgroup><col style="width:30.00%"><col style="width:70.00%"></colgroup><thead><tr><th>服務</th><th>一句話說明</th></tr></thead><tbody><tr class=""><td class="lead-cell">Amazon Quick Sight</td><td class="">互動式資料視覺化與 BI，前身為 Amazon QuickSight</td></tr><tr class="alt"><td class="lead-cell">Amazon Quick Automate</td><td class="">AI agent 編排企業級、端到端跨系統業務流程</td></tr><tr class=""><td class="lead-cell">Amazon Quick Flows</td><td class="">個人／團隊層級的 AI 驅動工作流程自動化</td></tr><tr class="alt"><td class="lead-cell">Amazon Quick Index</td><td class="">連接企業內部資料，作為 AI 回答的 grounding 索引層</td></tr><tr class=""><td class="lead-cell">Amazon Quick Research</td><td class="">跨網路與內部資料的深度研究，產出附引用來源報告</td></tr><tr class="alt"><td class="lead-cell">Apps in Amazon Quick</td><td class="">用自然語言描述需求，免寫程式碼建立互動式網頁應用</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">4/14</div></section>
+<section class="slide" data-index="4"><div class="kicker">PART 2・適用情境與案例 (1/2)</div><div class="bar"></div><h1 class="title">適用情境與成功案例：Sight ／ Automate ／ Flows</h1><div class="content table-wrap"><table class="deck-table "><colgroup><col style="width:20.00%"><col style="width:36.00%"><col style="width:44.00%"></colgroup><thead><tr><th>服務</th><th>適用情境</th><th>成功案例</th></tr></thead><tbody><tr class=""><td class="lead-cell">Quick Sight</td><td class="">BI 儀表板、嵌入式分析、即時大量資料報表</td><td class="">Mindex 客戶：手動 Excel 彙整 flash report → 互動儀表板＋自動 PDF 報表</td></tr><tr class="alt"><td class="lead-cell">Quick Automate</td><td class="">需 agent 判斷並跨系統執行動作的企業流程</td><td class="">dLocal 合規審查自動化：75% 商戶審查案件全自動完成，無需人工</td></tr><tr class=""><td class="lead-cell">Quick Flows</td><td class="">排程性、重複性的多步驟工作流程</td><td class="">AWS 財務團隊：情境模擬從 6 小時縮短到 10 分鐘，週報自動化上線前就緒</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">5/14</div></section>
+<section class="slide" data-index="5"><div class="kicker">PART 2・適用情境與案例 (2/2)</div><div class="bar"></div><h1 class="title">適用情境與成功案例：Index ／ Research ／ Apps</h1><div class="content table-wrap"><table class="deck-table "><colgroup><col style="width:20.00%"><col style="width:36.00%"><col style="width:44.00%"></colgroup><thead><tr><th>服務</th><th>適用情境</th><th>成功案例</th></tr></thead><tbody><tr class=""><td class="lead-cell">Quick Index</td><td class="">企業文件 grounding、跨部門資訊查詢與彙整摘要</td><td class="">官方範例：跨州政策問答、跨系統 WBR＋銷售更新一頁式彙整</td></tr><tr class="alt"><td class="lead-cell">Quick Research</td><td class="">市場情報、風險合規（專利／盡職調查）、客戶洞察</td><td class="">結合企業內部資料（SharePoint／Drive／Snowflake）＋200+ 家媒體＋第三方資料集</td></tr><tr class=""><td class="lead-cell">Apps in Quick</td><td class="">免程式碼快速建立內部小型互動工具、原型驗證</td><td class="">目前公開資料以功能說明為主，尚未查到具名企業量化成功案例</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">6/14</div></section>
+<section class="slide" data-index="6"><div class="kicker">PART 2・使用限制 (1/2)</div><div class="bar"></div><h1 class="title">使用限制：Sight ／ Automate ／ Flows</h1><div class="content table-wrap"><table class="deck-table "><colgroup><col style="width:24.00%"><col style="width:76.00%"></colgroup><thead><tr><th>服務</th><th>主要限制</th></tr></thead><tbody><tr class=""><td class="lead-cell">Quick Sight</td><td class="">本身不含 agent 自動化能力，需搭配 Quick Automate／Flows 才能「執行動作」</td></tr><tr class="alt"><td class="lead-cell">Quick Automate</td><td class="">不開放 Free／Plus 帳號；模糊／高風險案例仍需人工覆核，非 100% 全自動</td></tr><tr class=""><td class="lead-cell">Quick Flows</td><td class="">單一 instance 上限 10,000 個 flow、單人 100 個、單一 flow 35 步驟；排程每人上限 20 個</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">7/14</div></section>
+<section class="slide" data-index="7"><div class="kicker">PART 2・使用限制 (2/2)</div><div class="bar"></div><h1 class="title">使用限制：Index ／ Research ／ Apps</h1><div class="content table-wrap"><table class="deck-table "><colgroup><col style="width:24.00%"><col style="width:76.00%"></colgroup><thead><tr><th>服務</th><th>主要限制</th></tr></thead><tbody><tr class=""><td class="lead-cell">Quick Index</td><td class="">每個 Region 最多只能連接 2 個 Amazon Q Business index，且此配額無法提高</td></tr><tr class="alt"><td class="lead-cell">Quick Research</td><td class="">官方強調研究過程仍需人類專業判斷，較適合人機協作迭代，非全自動決策工具</td></tr><tr class=""><td class="lead-cell">Apps in Quick</td><td class="">不可下載 app 原始碼；每 app 最多 8 個視覺元件；僅限 4 個區域；公開分享功能受限</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">8/14</div></section>
+<section class="slide" data-index="8"><div class="kicker">PART 3・三方比較 (1/4)</div><div class="bar"></div><h1 class="title">主要目的</h1><div class="content table-wrap"><table class="deck-table compare"><colgroup><col style="width:16.00%"><col style="width:28.00%"><col style="width:28.00%"><col style="width:28.00%"></colgroup><thead><tr><th></th><th>Quick Automate</th><th>Quick Flows</th><th>Step Functions</th></tr></thead><tbody><tr class=""><td class="lead-cell">主要目的</td><td class="">AI agent 編排企業級、跨部門端到端業務流程（no-code）</td><td class="">個人／團隊層級的輕量 AI 工作流程自動化（no-code）</td><td class="">AWS 原生無伺服器服務編排，協調多個 AWS 服務狀態轉移（需寫程式碼／IaC）</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">9/14</div></section>
+<section class="slide" data-index="9"><div class="kicker">PART 3・三方比較 (2/4)</div><div class="bar"></div><h1 class="title">最佳適用情境</h1><div class="content table-wrap"><table class="deck-table compare"><colgroup><col style="width:16.00%"><col style="width:28.00%"><col style="width:28.00%"><col style="width:28.00%"></colgroup><thead><tr><th></th><th>Quick Automate</th><th>Quick Flows</th><th>Step Functions</th></tr></thead><tbody><tr class=""><td class="lead-cell">最佳適用情境</td><td class="">企業規模、長時間、高交易量流程：貸款審核、發票處理、供應商合規驗證</td><td class="">個人／團隊短時間重複任務：週報、草擬內容、自動回覆工單、資料前處理</td><td class="">精確編排多雲端服務呼叫、長時間執行（最長 1 年）或高並發（Express+Distributed Map 最多 1 萬並行）</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">10/14</div></section>
+<section class="slide" data-index="10"><div class="kicker">PART 3・三方比較 (3/4)</div><div class="bar"></div><h1 class="title">使用限制</h1><div class="content table-wrap"><table class="deck-table compare"><colgroup><col style="width:16.00%"><col style="width:28.00%"><col style="width:28.00%"><col style="width:28.00%"></colgroup><thead><tr><th></th><th>Quick Automate</th><th>Quick Flows</th><th>Step Functions</th></tr></thead><tbody><tr class=""><td class="lead-cell">使用限制</td><td class="">不開放 Free／Plus 帳號；高風險案例仍需人工覆核</td><td class="">10,000 flow／instance、35 步驟／flow、排程每人 20 個等平台上限</td><td class="">State machine 定義上限 1MB；單次資料傳遞上限 256KiB；Express 執行時間上限 5 分鐘；Standard 執行歷史硬限制 25,000 筆事件</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">11/14</div></section>
+<section class="slide" data-index="11"><div class="kicker">PART 3・三方比較 (4/4)</div><div class="bar"></div><h1 class="title">不適合使用的情況</h1><div class="content table-wrap"><table class="deck-table compare"><colgroup><col style="width:16.00%"><col style="width:28.00%"><col style="width:28.00%"><col style="width:28.00%"></colgroup><thead><tr><th></th><th>Quick Automate</th><th>Quick Flows</th><th>Step Functions</th></tr></thead><tbody><tr class=""><td class="lead-cell">不適合情況</td><td class="">單純、輕量、個人層級小任務；完全無人監督的高風險最終決策</td><td class="">企業規模、跨部門、需嚴謹案件管理與錯誤處理的複雜長流程</td><td class="">需要業務人員用自然語言直接建立（非 no-code）；資料量超 256KiB 又不想接 S3 中轉</td></tr></tbody></table></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">12/14</div></section>
+<section class="slide" data-index="12"><div class="kicker">PART 3・總結</div><div class="bar"></div><h1 class="title">三者定位一句話總結</h1><div class="content"><ul class="bullets"><li><span class="lead">Quick Flows：</span>給一般業務同仁用的「輕量個人自動化」，no-code、自然語言驅動</li><li><span class="lead">Quick Automate：</span>給 power user 用的「企業級 AI agent 流程編排」，no-code、自然語言驅動</li><li><span class="lead">Step Functions：</span>底層雲端架構服務，給工程團隊用程式碼精確控制 AWS 服務間的狀態機編排</li><li><span class="lead">實務建議：</span>業務層 AI 決策交給 Quick Automate／Flows，系統間精準、大規模、長時間編排交給 Step Functions，三者互補而非互斥</li></ul></div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">13/14</div></section>
+<section class="slide" data-index="13"><div class="kicker">總結</div><div class="bar"></div><h1 class="title">重點回顧</h1><div class="content"><ul class="bullets"><li>Amazon Quick Suite 已整合成六大服務，涵蓋 BI、agent 自動化、輕量流程、企業知識庫、深度研究、免碼應用</li><li><span class="lead">自動化工具選型：</span>個人任務用 Quick Flows、企業級 agent 流程用 Quick Automate、底層系統編排用 Step Functions</li><li><span class="lead">三者互補而非互斥：</span>業務層 AI 決策交給 Quick Automate／Flows，系統間精準、大規模、長時間編排交給 Step Functions</li></ul></div><div class="closing-note">簡報／RWD HTML／README 三份檔案內容互相對應，來源同一份資料</div>
+    <div class="footer-line"></div>
+    <div class="footer-left">Ken ・ 2026/09/20</div>
+    <div class="footer-right">14/14</div></section>
+    </div>
+  </div>
+
+  <div class="ui">
+    <div class="clickzone left" id="zoneLeft"></div>
+    <div class="clickzone right" id="zoneRight"></div>
+  </div>
+
+  <div class="topbar">
+    <div class="brand">AWS Quick 服務總覽與自動化工具比較</div>
+    <div class="right-controls">
+      <select id="jumpSelect" title="跳到指定投影片"><option value="0">1. AWS Quick 服務總覽與</option><option value="1">2. 本次簡報議程</option><option value="2">3. Amazon Quick Suite 是什麼？</option><option value="3">4. 六大服務一覽</option><option value="4">5. 適用情境與成功案例：Sight ／ Automate ／ Flows</option><option value="5">6. 適用情境與成功案例：Index ／ Research ／ Apps</option><option value="6">7. 使用限制：Sight ／ Automate ／ Flows</option><option value="7">8. 使用限制：Index ／ Research ／ Apps</option><option value="8">9. 主要目的</option><option value="9">10. 最佳適用情境</option><option value="10">11. 使用限制</option><option value="11">12. 不適合使用的情況</option><option value="12">13. 三者定位一句話總結</option><option value="13">14. 重點回顧</option></select>
+      <button class="iconbtn" id="fsBtn" title="全螢幕">⛶</button>
+    </div>
+  </div>
+
+  <div class="bottombar">
+    <button class="navbtn" id="prevBtn">‹ 上一頁</button>
+    <span class="pageindicator" id="pageIndicator">1 / 14</span>
+    <button class="navbtn" id="nextBtn">下一頁 ›</button>
+  </div>
+
+<script>
+(function() {
+  var total = 14;
+  var current = 0;
+  var slides = document.querySelectorAll('.slide');
+  var canvas = document.getElementById('canvas');
+  var stage = document.getElementById('stage');
+  var progress = document.getElementById('progress');
+  var pageIndicator = document.getElementById('pageIndicator');
+  var jumpSelect = document.getElementById('jumpSelect');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+
+  function fitScale() {
+    var sw = stage.clientWidth, sh = stage.clientHeight;
+    var scale = Math.min(sw / 1920, sh / 1080);
+    canvas.style.transform = 'scale(' + scale + ')';
+  }
+
+  function goTo(i) {
+    if (i < 0) i = 0;
+    if (i > total - 1) i = total - 1;
+    slides[current].classList.remove('active');
+    current = i;
+    slides[current].classList.add('active');
+    pageIndicator.textContent = (current + 1) + ' / ' + total;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    jumpSelect.value = String(current);
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    try { history.replaceState(null, '', '#' + (current + 1)); } catch (e) {}
+  }
+
+  prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  nextBtn.addEventListener('click', function() { goTo(current + 1); });
+  document.getElementById('zoneLeft').addEventListener('click', function() { goTo(current - 1); });
+  document.getElementById('zoneRight').addEventListener('click', function() { goTo(current + 1); });
+  jumpSelect.addEventListener('change', function() { goTo(parseInt(jumpSelect.value, 10)); });
+
+  document.addEventListener('keydown', function(e) {
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) { goTo(current + 1); e.preventDefault(); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { goTo(current - 1); e.preventDefault(); }
+    else if (e.key === 'Home') { goTo(0); }
+    else if (e.key === 'End') { goTo(total - 1); }
+  });
+
+  var touchStartX = null;
+  stage.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+  stage.addEventListener('touchend', function(e) {
+    if (touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { goTo(dx < 0 ? current + 1 : current - 1); }
+    touchStartX = null;
+  }, {passive:true});
+
+  var fsBtn = document.getElementById('fsBtn');
+  fsBtn.addEventListener('click', function() {
+    if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+    else { document.exitFullscreen && document.exitFullscreen(); }
+  });
+  document.addEventListener('fullscreenchange', function() {
+    fsBtn.textContent = document.fullscreenElement ? '⤢' : '⛶';
+    fitScale();
+  });
+
+  window.addEventListener('resize', fitScale);
+  window.addEventListener('orientationchange', fitScale);
+
+  var startIndex = 0;
+  var hash = parseInt((location.hash || '').replace('#', ''), 10);
+  if (!isNaN(hash) && hash >= 1 && hash <= total) startIndex = hash - 1;
+
+  fitScale();
+  goTo(startIndex);
+})();
+</script>
+</body>
+</html>
